@@ -7,15 +7,11 @@ class Node {
 public:
     int data;
     Node* next;
-  
-    // Default constructor
     Node()
     {
         data = 0;
         next = NULL;
     }
-  
-    // Parameterised Constructor
     Node(int data)
     {
         this->data = data;
@@ -23,31 +19,18 @@ public:
     }
 };
   
-// Linked list class to
-// implement a linked list.
 class Linkedlist {
-    Node* head;
+    
   
 public:
-    // Default constructor
+    Node* head;
     Linkedlist() { head = NULL; }
-  
-    // Function to insert a
-    // node at the end of the
-    // linked list.
     void insertNode(int);
-  
-    // Function to print the
-    // linked list.
     void printList();
-  
-    // Function to delete the
-    // node at given position
     void deleteNode(int);
+    void insertFront(struct Node **head, int n);
 };
   
-// Function to delete the
-// node at given position
 void Linkedlist::deleteNode(int nodeOffset)
 {
     Node *temp1 = head, *temp2 = NULL;
@@ -57,90 +40,87 @@ void Linkedlist::deleteNode(int nodeOffset)
         cout << "List empty." << endl;
         return;
     }
-  
-    // Find length of the linked-list.
+
     while (temp1 != NULL) {
         temp1 = temp1->next;
         ListLen++;
     }
-  
-    // Check if the position to be
-    // deleted is greater than the length
-    // of the linked list.
+
     if (ListLen < nodeOffset) {
         cout << "Index out of range"
              << endl;
         return;
     }
   
-    // Declare temp1
+
     temp1 = head;
   
-    // Deleting the head.
+
     if (nodeOffset == 1) {
   
-        // Update head
+       
         head = head->next;
         delete temp1;
         return;
     }
   
-    // Traverse the list to
-    // find the node to be deleted.
     while (nodeOffset-- > 1) {
   
-        // Update temp2
+       
         temp2 = temp1;
   
-        // Update temp1
+    
         temp1 = temp1->next;
     }
   
-    // Change the next pointer
-    // of the previous node.
+
     temp2->next = temp1->next;
-  
-    // Delete the node
+
     delete temp1;
 }
-  
-// Function to insert a new node.
+
+void Linkedlist::insertFront(struct Node **head, int n) {
+	Node *newNode = new Node;
+	newNode->data = n;
+	newNode->next = *head;
+	*head = newNode;
+}
+
 void Linkedlist::insertNode(int data)
 {
-    // Create the new Node.
+
     Node* newNode = new Node(data);
   
-    // Assign to head
+   
     if (head == NULL) {
         head = newNode;
         return;
     }
   
-    // Traverse till end of list
+
     Node* temp = head;
     while (temp->next != NULL) {
   
-        // Update temp
+     
         temp = temp->next;
     }
   
-    // Insert at the last.
+   
     temp->next = newNode;
 }
   
-// Function to print the
-// nodes of the linked list.
+
 void Linkedlist::printList()
 {
     Node* temp = head;
   
-    // Check for empty list.
+ 
     if (head == NULL) {
         cout << "List empty" << endl;
         return;
     }
   
-    // Traverse the list.
+ 
     while (temp != NULL) {
         cout << temp->data << " ";
         temp = temp->next;
@@ -151,14 +131,23 @@ int main(int argc, char const *argv[])
     Linkedlist list;
 
     int size;
-
+    int value;
+    char inicio_final;
     cout << "Ingrese Valor del tama;o de la lista: ";
     cin >>  size;
     for (int i = 0; i < size; i++){
-        int nose;
-        cout << "Ingrese el valor del primer nodo: ";
-        cin >> nose;
-        list.insertNode(nose);
+        cout << "Ingresar el valor al inicio o final (i/f) ";
+        cin>> inicio_final;
+        if(inicio_final=='i'){
+            cout << "Ingrese el valor del primer nodo: ";
+            cin >> value;
+            list.insertFront(&(list.head),value);
+        }
+        if(inicio_final=='f'){
+            cout << "Ingrese el valor del primer nodo: ";
+            cin >> value;
+            list.insertNode(value);
+        }
     }
     cout << "La lista es: " << endl;
     list.printList();
