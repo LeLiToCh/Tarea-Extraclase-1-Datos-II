@@ -148,54 +148,76 @@ int main(int argc, char const *argv[])
 
     int value;
 
-    cout << "1.Crear Lista simple " << endl;
-    cout << "2.Insertar valores en la lista" << endl;
-    cout << "3.Eliminar nodo de la lista" << endl;
-    cout << "4.Ver lista de el bote de basura" << endl;
-    cout << "5.Salir";
-    
-    switch ((opcion))
-    {
-    case 1:
-        cout << "Ingrese Valor del tamaño de la lista: ";
-        cin >>  size;
-        break;
-    case 2:
-        if (size == NULL){
-            cout << "No se ha creado ninguna lista" << endl;
-        }
-        else{
-            for (int i = 0; i < size; i++){
+    do{
+        cout << "*****************" << endl;
+        cout << "1.Crear Lista simple " << endl;
+        cout << "2.Insertar valores en la lista" << endl;
+        cout << "3.Eliminar nodo de la lista" << endl;
+        cout << "4.Imprimir lista" << endl;
+        cout << "5.Ver lista de el bote de basura" << endl;
+        cout << "6.Salir" << endl;
+        cout << "Opcion: ";
 
-                cout << "Ingresar el valor al inicio o final (i/f) ";
-                cin >> inicio_final;
-                if(inicio_final=='i'){
-                    cout << "Ingrese el valor del primer nodo: ";
-                    cin >> value;
-                    list.insertFront(&(list.head),value);
-                }
-                else if(inicio_final=='f'){
-                    cout << "Ingrese el valor del primer nodo: ";
-                    cin >> value;
-                    list.insertNode(value);
-        }
+        cin >> opcion;
+
+        cout << endl;
+
+        switch ((opcion))
+        {
+        case 1:
+            cout << "Ingrese Valor del tamaño de la lista: ";
+            cin >>  size;
+            break;
+        case 2:
+            if (size == NULL){
+                cout << "No se ha creado ninguna lista" << endl;
             }
-        }
-        break;
-    case 3:
-        if (size == NULL){
-            cout << "No se ha creado ninguna lista" << endl;
-        }
-        else {
+            else{
+                for (int i = 0; i < size; i++){
 
+                    cout << "Ingresar el valor al inicio o final (i/f) ";
+                    cin >> inicio_final;
+                    if(inicio_final=='i'){
+                        cout << "Ingrese el valor del primer nodo: ";
+                        cin >> value;
+                        list.insertFront(&(list.head),value);
+                    }
+                    else if(inicio_final=='f'){
+                        cout << "Ingrese el valor del primer nodo: ";
+                        cin >> value;
+                        list.insertNode(value);
+            }
+                }
+            }
+            break;
+        case 3:
+            if (size == NULL){
+                cout << "No se ha creado ninguna lista" << endl;
+            }
+            else {
+
+            }
+            break;
+        case 4:
+            if (size == NULL){
+                cout << "No se ha creado ninguna lista" << endl;
+            }
+            else{
+                cout << "La lista es: ";
+                list.printList(); 
+                cout << endl;
+            }
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        default:
+            break;
         }
-        break;
-    case 4:
-        break;
-    case 5:
-        break;
-    default:
-        break;
-    }
+
+    }while(opcion != 6);
+
+    
     return 0;
 }
