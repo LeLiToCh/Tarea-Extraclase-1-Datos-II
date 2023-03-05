@@ -5,17 +5,16 @@ using namespace std;
 
 class Node {
 public:
+
     int data;
     Node* next;
   
-    // Default constructor
     Node()
     {
         data = 0;
         next = NULL;
     }
   
-    // Parameterised Constructor
     Node(int data)
     {
         this->data = data;
@@ -23,27 +22,21 @@ public:
     }
 };
   
-// Linked list class to
-// implement a linked list.
 class Linkedlist {
+    
+public:
+
+    Linkedlist() { head = NULL; }
+
     Node* head;
   
-public:
-    // Default constructor
-    Linkedlist() { head = NULL; }
-  
-    // Function to insert a
-    // node at the end of the
-    // linked list.
     void insertNode(int);
-  
-    // Function to print the
-    // linked list.
+
     void printList();
   
-    // Function to delete the
-    // node at given position
     void deleteNode(int);
+
+    void insertFront(Node **head, int n);
 };
   
 // Function to delete the
@@ -58,35 +51,26 @@ void Linkedlist::deleteNode(int nodeOffset)
         return;
     }
   
-    // Find length of the linked-list.
     while (temp1 != NULL) {
         temp1 = temp1->next;
         ListLen++;
     }
-  
-    // Check if the position to be
-    // deleted is greater than the length
-    // of the linked list.
+
     if (ListLen < nodeOffset) {
         cout << "Index out of range"
              << endl;
         return;
     }
   
-    // Declare temp1
     temp1 = head;
-  
-    // Deleting the head.
+
     if (nodeOffset == 1) {
   
-        // Update head
         head = head->next;
         delete temp1;
         return;
     }
   
-    // Traverse the list to
-    // find the node to be deleted.
     while (nodeOffset-- > 1) {
   
         // Update temp2
@@ -102,6 +86,12 @@ void Linkedlist::deleteNode(int nodeOffset)
   
     // Delete the node
     delete temp1;
+}
+void Linkedlist::insertFront(Node **head, int n) {
+	Node *newNode = new Node;
+	newNode->data = n;
+	newNode->next = *head;
+	*head = newNode;
 }
   
 // Function to insert a new node.
@@ -152,15 +142,60 @@ int main(int argc, char const *argv[])
 
     int size;
 
-    cout << "Ingrese Valor del tama;o de la lista: ";
-    cin >>  size;
-    for (int i = 0; i < size; i++){
-        int nose;
-        cout << "Ingrese el valor del primer nodo: ";
-        cin >> nose;
-        list.insertNode(nose);
+    int opcion;
+
+    char inicio_final;
+
+    int value;
+
+    cout << "1.Crear Lista simple " << endl;
+    cout << "2.Insertar valores en la lista" << endl;
+    cout << "3.Eliminar nodo de la lista" << endl;
+    cout << "4.Ver lista de el bote de basura" << endl;
+    cout << "5.Salir";
+    
+    switch ((opcion))
+    {
+    case 1:
+        cout << "Ingrese Valor del tamaño de la lista: ";
+        cin >>  size;
+        break;
+    case 2:
+        if (size == NULL){
+            cout << "No se ha creado ninguna lista" << endl;
+        }
+        else{
+            for (int i = 0; i < size; i++){
+
+                cout << "Ingresar el valor al inicio o final (i/f) ";
+                cin >> inicio_final;
+                if(inicio_final=='i'){
+                    cout << "Ingrese el valor del primer nodo: ";
+                    cin >> value;
+                    list.insertFront(&(list.head),value);
+                }
+                else if(inicio_final=='f'){
+                    cout << "Ingrese el valor del primer nodo: ";
+                    cin >> value;
+                    list.insertNode(value);
+        }
+            }
+        }
+        break;
+    case 3:
+        if (size == NULL){
+            cout << "No se ha creado ninguna lista" << endl;
+        }
+        else {
+
+        }
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    default:
+        break;
     }
-    cout << "La lista es: " << endl;
-    list.printList();
     return 0;
 }

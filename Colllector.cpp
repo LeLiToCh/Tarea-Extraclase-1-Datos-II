@@ -1,7 +1,7 @@
 class Colllector
 {
 private:
-    /* data */
+    int basura[3];
 public:
     Colllector(/* args */);
     ~Colllector();
