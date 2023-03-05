@@ -64,14 +64,14 @@ void Linkedlist::deleteNode(int nodeOffset)
   
     temp1 = head;
 
-    if (nodeOffset == 1) {
+    if (nodeOffset == 0) {
   
         head = head->next;
         delete temp1;
         return;
     }
   
-    while (nodeOffset-- > 1) {
+    while (nodeOffset-- > 0) {
   
         // Update temp2
         temp2 = temp1;
@@ -195,7 +195,13 @@ int main(int argc, char const *argv[])
                 cout << "No se ha creado ninguna lista" << endl;
             }
             else {
-
+                size--;
+                cout << "Ingrese el valor del elemento que desea eliminar: ";
+                cin >> value;
+                list.deleteNode(value);
+                cout << "--------------------------------------------------- " <<endl;
+                list.printList(); 
+                cout << "--------------------------------------------------- " <<endl;
             }
             break;
         case 4:
