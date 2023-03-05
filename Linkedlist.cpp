@@ -1,5 +1,4 @@
 #include <iostream>
-#include<conio.h>
 
 using namespace std;
 
@@ -73,18 +72,13 @@ void Linkedlist::deleteNode(int nodeOffset)
   
     while (nodeOffset-- > 0) {
   
-        // Update temp2
         temp2 = temp1;
   
-        // Update temp1
         temp1 = temp1->next;
     }
   
-    // Change the next pointer
-    // of the previous node.
     temp2->next = temp1->next;
   
-    // Delete the node
     delete temp1;
 }
 void Linkedlist::insertFront(Node **head, int n) {
@@ -94,43 +88,33 @@ void Linkedlist::insertFront(Node **head, int n) {
 	*head = newNode;
 }
   
-// Function to insert a new node.
 void Linkedlist::insertNode(int data)
 {
-    // Create the new Node.
     Node* newNode = new Node(data);
   
-    // Assign to head
     if (head == NULL) {
         head = newNode;
         return;
     }
   
-    // Traverse till end of list
     Node* temp = head;
     while (temp->next != NULL) {
   
-        // Update temp
         temp = temp->next;
     }
-  
-    // Insert at the last.
+
     temp->next = newNode;
 }
   
-// Function to print the
-// nodes of the linked list.
 void Linkedlist::printList()
 {
     Node* temp = head;
   
-    // Check for empty list.
     if (head == NULL) {
         cout << "List empty" << endl;
         return;
     }
   
-    // Traverse the list.
     while (temp != NULL) {
         cout << temp->data << " ";
         temp = temp->next;
@@ -195,7 +179,7 @@ int main(int argc, char const *argv[])
                 cout << "No se ha creado ninguna lista" << endl;
             }
             else {
-                size--;
+                    size--;
                 cout << "Ingrese el valor del elemento que desea eliminar: ";
                 cin >> value;
                 list.deleteNode(value);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include<conio.h>
+#include "Collector.cpp"
 
 using namespace std;
 
@@ -31,12 +32,11 @@ public:
     Node* head;
   
     void insertNode(int);
-
     void printList();
-  
     void deleteNode(int);
-
     void insertFront(Node **head, int n);
+    void * operator new(size_t size);
+    void operator delete(void * p);
 };
 
 void Linkedlist::deleteNode(int nodeOffset)
@@ -65,6 +65,7 @@ void Linkedlist::deleteNode(int nodeOffset)
     if (nodeOffset == 0) {
   
         head = head->next;
+        delete(temp1);
         delete temp1;
         return;
     }
@@ -128,6 +129,20 @@ void Linkedlist::printList()
         temp = temp->next;
     }
 }
+
+void * operator new(size_t size, int tamaño)
+{
+
+    void * p = ::operator new(size);
+}
+
+void operator delete(void * p, Node* basura)
+{
+    Colllector collector;
+    collector.basuraa[0] = &(basura->data);
+    free(p);
+}
+
 int main(int argc, char const *argv[])
 {
     Linkedlist list;
@@ -135,6 +150,7 @@ int main(int argc, char const *argv[])
     int opcion;
     char inicio_final;
     int value;
+    Colllector col;
 
     do{
         cout << "1.Crear Lista simple " << endl;
@@ -203,6 +219,7 @@ int main(int argc, char const *argv[])
             }
             break;
         case 5:
+            cout << col.basuraa[0] << endl;
             break;
         case 6:
             break;

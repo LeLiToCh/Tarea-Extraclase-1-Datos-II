@@ -1,9 +1,8 @@
 class Colllector
 {
-private:
-    int basura[3];
 public:
-    Colllector(/* args */);
+    int* basuraa[3];
+    Colllector();
     ~Colllector();
 };
 
