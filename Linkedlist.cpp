@@ -74,81 +74,135 @@ public:
     */
 class LinkedList{ 
 
-private:
+public:
    
+    LinkedList() { head = NULL; }
+    Node* head;
+    void insertNode(int);
+    void printList();
+    void deleteNode(int);
+    void insertFront(Node **head, int n);
+    void * operator new(size_t size);
+    void operator delete(void * p);
+     /**
+        @brief Metodo para insertar el primer nodo de toda la lista. 
+        @param valor para insertar en la lista
+    */
     void set_node_head(Node *&head, int value){
         Node *new_node = new Node(value);
         Node *aux = head;
         head = new_node;
         head->next = aux;
-
     }
-    void eliminate_node_head(Node *&head){
-      
-        if(head != NULL){
-            Node *aux_eliminar;
-            aux_eliminar = head;
+};
 
-            head = head->next;
-            delete(aux_eliminar);
-
-
-        }
-    }
-    void shoow_list(Node *head){
-     
-
-        Node *actual;
-        actual = head;
-        cout << "[";
-        while(actual != NULL){
-            if (actual->next == NULL){
-                cout<<actual->valor;
-            }
-            else{
-                cout<<actual->valor << ",";
-            }            
-            actual = actual->next;
-        }
-        cout << "]";
-    }
-public:
-    /**
-        @brief puntero auxiliar del primer valor de la lista, es el euivalente a la cabeza de la lista.
-    */
-    Node *first = NULL;
     /**
         @brief Metodo para insertar nodo al final de la lista. 
         @param valor para insertar en la lista
     */
-    void set_new_node(int value){
-        set_node_head(first, value);
+    void LinkedList::insertNode(int data)
+    {
+    
+    Node* newNode = new Node(data);
+    
+    if (head == NULL) {
+        head = newNode;
+        return;
     }
+    
+    Node* temp = head;
+    while (temp->next != NULL) {
+  
+        
+        temp = temp->next;
+    }
+   
+    temp->next = newNode;
+}
     /**
         @brief Metodo para insertar un valor al inicio de la lista (cambiar al valor de la cabeza)
-        @param ffff
+        @param valor que se desea insertar al inicio de la lista
         @return
     */
-     void set_head(int new_value){
- 
-        first->valor = new_value;
+void LinkedList::insertFront(Node **head, int n) {
+	Node* newNode = new Node(n);
+	newNode->valor = n;
+	newNode->next = *head;
+	*head = newNode;
     }
 
     /**
         @brief metodo para eliminar un nodo, ademas llama el delete sobrecargado.
         
     */
-    void eliminate_node(){
-        eliminate_node_head(first);
+void LinkedList::deleteNode(int nodeOffset)
+    {
+    Node *temp1 = head, *temp2 = NULL;
+    int ListLen = 0;
+  
+    if (head == NULL) {
+        cout << "List empty." << endl;
+        return;
     }
+  
+    while (temp1 != NULL) {
+        temp1 = temp1->next;
+        ListLen++;
+    }
+
+    if (ListLen < nodeOffset) {
+        cout << "Index out of range"
+             << endl;
+        return;
+    }
+  
+    temp1 = head;
+
+    if (nodeOffset == 0) {
+  
+        head = head->next;
+        delete(temp1);
+        delete temp1;
+        return;
+    }
+  
+    while (nodeOffset-- > 0) {
+        temp2 = temp1;
+
+        temp1 = temp1->next;
+    }
+    temp2->next = temp1->next;
+  
+    // Delete the node
+    delete temp1;
+
+}
     /**
         @brief Metodo que imprime todos lo elementos de la lista
     */
-    void show_list(){
-        shoow_list(first);
+void LinkedList::printList()
+    {
+    Node* temp = head;
+  
+    // Check for empty list.
+    if (head == NULL) {
+        cout << "List empty" << endl;
+        return;
     }
-
-};
+  
+    // Traverse the list.
+    cout << "[";
+    while (temp != NULL) {
+        if (temp->next == NULL){
+            cout << temp->valor; 
+        }
+        else{
+            cout << temp->valor << ",";
+        }
+        temp = temp->next;
+    }
+    cout << "]";
+}
 
     /**
         @brief Metodo main del programa el cual inicializa la clase lista y las variables necesarias 
@@ -160,6 +214,10 @@ int main(int argc, char const *argv[])
         @brief Instanciacion de la clase lista
     */
     LinkedList list;
+    /**
+        @brief Instanciacion de la clase collector
+    */
+    Collector col;
     /**
         @brief variable que almacena el tamanno de la lista
     */
@@ -211,15 +269,15 @@ int main(int argc, char const *argv[])
                     if(first_final=='b'){
                         cout << "Set node value: ";
                         cin >> value;
-                        list.set_head(value);
+                        list.insertFront(&(list.head),value);
                        
 
                     }
                     else if(first_final=='e'){
                         cout << "Set node value: ";
                         cin >> value;
-                        list.set_new_node(value);
-            }
+                        list.insertNode(value);
+                    }
                 }
             }
             break;
@@ -231,9 +289,9 @@ int main(int argc, char const *argv[])
                 size--;
                 cout << "Set node to eliminate: ";
                     cin >> value;
-                    list.eliminate_node();
+                    list.deleteNode(value);
                     cout << "--------------------------------------------------- " <<endl;
-                    list.show_list(); 
+                    list.printList(); 
                     cout << "--------------------------------------------------- " <<endl;
             }
             break;
@@ -243,12 +301,12 @@ int main(int argc, char const *argv[])
             }
             else{
                 cout << "The list is: ";
-                list.show_list(); 
+                list.printList();  
                 cout << endl;
             }
             break;
         case 5:
-            
+            col.show_collector();
             break;
         case 6:
             break;
