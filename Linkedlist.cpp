@@ -1,204 +1,254 @@
 #include <iostream>
-
+#include<conio.h>
+#include "Collector.cpp"
 using namespace std;
-
-class Node {
+    /**
+        @brief instanciacion de la clase collector para su porterior uso dentro de la clase Lista (lista enlazada),
+        la cual contiene los valores con los cuales se puede interactuar.
+        
+    */
+Collector *collector = new Collector;
+    /**
+        @param Creacion de la clase Nodo misma que se relaciona con la clase Lista, aqui se almacenan 
+        los valores de head, ademas del set y get respectivo.
+    */
+class Node{
+  
 public:
 
-    int data;
-    Node* next;
-  
-    Node()
-    {
-        data = 0;
-        next = NULL;
-    }
-  
-    Node(int data)
-    {
-        this->data = data;
+   
+    /**
+        @brief Valor que se utiliza en la sobrecarga del new y delete, este sirve para almacenar
+        la variable que el usuario desea eliminar de la lista, para su posterior envio a la clase
+        collector.
+    */
+    int valor;
+      /**
+       @brief Nodo next que sirve para la transicion de la cabeza de la linked lis
+    */
+    Node *next;
+    /**
+        @brief Metodo set 
+        @param valor para insertar en la lista
+    */
+    Node (int valor){
+        this->valor = valor;
         this->next = NULL;
     }
-};
-  
-class Linkedlist {
+    /**
+        @brief Sobrecarga del metodo new para asi poder extraer alguna direccion disponible de la clase collector
+        @param Valor para crear en el heap (a este se le asigna el possible valor de direccion disponible de la clase collector).
+        @return valor de lo que se inserto en la lista enlazada
+    */
+    void * operator new(size_t size)
+    {
+        if (collector->check() == false) {
+
+          
+            void * p = ::operator new(size);
+            std::cout<<"Garbage collector is empty" << std::endl;
+            return p;
+        }
+        else {
+          
+            void * p = reinterpret_cast<void *>(collector->get_collector_value());
+            std::cout<<"New direccion of node is: " << p <<std::endl;
+            return p;
+        }
+    }
+    /**
+        @brief Sobrecarga del metodo delete, el cual envia el valor del nodo seleccionado a la clase collector 
+        y posteriormente elimina el valor como normalmente se hace.
+        @param valor a eliminar
+    */
+    void operator delete(void * p)
     
-public:
-
-    Linkedlist() { head = NULL; }
-
-    Node* head;
-  
-    void insertNode(int);
-
-    void printList();
-  
-    void deleteNode(int);
-
-    void insertFront(Node **head, int n);
+    {
+        std::cout<<"The pointer to delete is: " << p <<std::endl;
+        collector->set_collector(p);
+        free(p);
+    }
 };
-  
-// Function to delete the
-// node at given position
-void Linkedlist::deleteNode(int nodeOffset)
-{
-    Node *temp1 = head, *temp2 = NULL;
-    int ListLen = 0;
-  
-    if (head == NULL) {
-        cout << "List empty." << endl;
-        return;
+    /**
+        @brief Clase lista (lista enlazada), la cual almacena todos los valores que el usuario desee annadir.
+    */
+class LinkedList{ 
+
+private:
+   
+    void set_node_head(Node *&head, int value){
+        Node *new_node = new Node(value);
+        Node *aux = head;
+        head = new_node;
+        head->next = aux;
+
     }
-  
-    while (temp1 != NULL) {
-        temp1 = temp1->next;
-        ListLen++;
+    void eliminate_node_head(Node *&head){
+      
+        if(head != NULL){
+            Node *aux_eliminar;
+            aux_eliminar = head;
+
+            head = head->next;
+            delete(aux_eliminar);
+
+
+        }
+    }
+    void shoow_list(Node *head){
+     
+
+        Node *actual;
+        actual = head;
+        cout << "[";
+        while(actual != NULL){
+            if (actual->next == NULL){
+                cout<<actual->valor;
+            }
+            else{
+                cout<<actual->valor << ",";
+            }            
+            actual = actual->next;
+        }
+        cout << "]";
+    }
+public:
+    /**
+        @brief puntero auxiliar del primer valor de la lista, es el euivalente a la cabeza de la lista.
+    */
+    Node *first = NULL;
+    /**
+        @brief Metodo para insertar nodo al final de la lista. 
+        @param valor para insertar en la lista
+    */
+    void set_new_node(int value){
+        set_node_head(first, value);
+    }
+    /**
+        @brief Metodo para insertar un valor al inicio de la lista (cambiar al valor de la cabeza)
+        @param ffff
+        @return
+    */
+     void set_head(int new_value){
+ 
+        first->valor = new_value;
     }
 
-    if (ListLen < nodeOffset) {
-        cout << "Index out of range"
-             << endl;
-        return;
+    /**
+        @brief metodo para eliminar un nodo, ademas llama el delete sobrecargado.
+        
+    */
+    void eliminate_node(){
+        eliminate_node_head(first);
     }
-  
-    temp1 = head;
-
-    if (nodeOffset == 0) {
-  
-        head = head->next;
-        delete temp1;
-        return;
-    }
-  
-    while (nodeOffset-- > 0) {
-  
-        temp2 = temp1;
-  
-        temp1 = temp1->next;
-    }
-  
-    temp2->next = temp1->next;
-  
-    delete temp1;
-}
-void Linkedlist::insertFront(Node **head, int n) {
-	Node *newNode = new Node;
-	newNode->data = n;
-	newNode->next = *head;
-	*head = newNode;
-}
-  
-void Linkedlist::insertNode(int data)
-{
-    Node* newNode = new Node(data);
-  
-    if (head == NULL) {
-        head = newNode;
-        return;
-    }
-  
-    Node* temp = head;
-    while (temp->next != NULL) {
-  
-        temp = temp->next;
+    /**
+        @brief Metodo que imprime todos lo elementos de la lista
+    */
+    void show_list(){
+        shoow_list(first);
     }
 
-    temp->next = newNode;
-}
-  
-void Linkedlist::printList()
-{
-    Node* temp = head;
-  
-    if (head == NULL) {
-        cout << "List empty" << endl;
-        return;
-    }
-  
-    while (temp != NULL) {
-        cout << temp->data << " ";
-        temp = temp->next;
-    }
-}
+};
+
+    /**
+        @brief Metodo main del programa el cual inicializa la clase lista y las variables necesarias 
+        para que el programa corra correctamente
+    */
 int main(int argc, char const *argv[])
-{
-    Linkedlist list;
-
+{   
+    /**
+        @brief Instanciacion de la clase lista
+    */
+    LinkedList list;
+    /**
+        @brief variable que almacena el tamanno de la lista
+    */
     int size;
-
-    int opcion;
-
-    char inicio_final;
-
+    /**
+        @brief variable que almacena la opcion elegida por el usuario en la terminal 
+    */
+    int option;
+    /**
+        @brief variable tipo char que selecciona el tipo de insercion al la lista enlazada
+    */
+    char first_final;
+    /**
+        @brief valor escogido por el usuario
+    */
     int value;
-
+    /**
+        @brief metodo do que inicializa el menu de uso para que el usuario seleccione la opcion que asi desee
+    */
     do{
-        cout << "*****************" << endl;
-        cout << "1.Crear Lista simple " << endl;
-        cout << "2.Insertar valores en la lista" << endl;
-        cout << "3.Eliminar nodo de la lista" << endl;
-        cout << "4.Imprimir lista" << endl;
-        cout << "5.Ver lista de el bote de basura" << endl;
-        cout << "6.Salir" << endl;
+        
+        cout << "1.Create new list " << endl;
+        cout << "2.Set nodes" << endl;
+        cout << "3.Remove node" << endl;
+        cout << "4.Print list" << endl;
+        cout << "5.Show list of garbage collector" << endl;
+        cout << "6.Exit" << endl;
         cout << "Opcion: ";
 
-        cin >> opcion;
+        cin >> option;
 
         cout << endl;
 
-        switch ((opcion))
+        switch ((option))
         {
         case 1:
-            cout << "Ingrese Valor del tamaño de la lista: ";
+            cout << "Set list size: ";
             cin >>  size;
             break;
         case 2:
             if (size == NULL){
-                cout << "No se ha creado ninguna lista" << endl;
+                cout << "No list created" << endl;
             }
             else{
                 for (int i = 0; i < size; i++){
 
-                    cout << "Ingresar el valor al inicio o final (i/f) ";
-                    cin >> inicio_final;
-                    if(inicio_final=='i'){
-                        cout << "Ingrese el valor del primer nodo: ";
+                    cout << "Set value in beginning or end (b/e) ";
+                    cin >> first_final;
+                    if(first_final=='b'){
+                        cout << "Set node value: ";
                         cin >> value;
-                        list.insertFront(&(list.head),value);
+                        list.set_head(value);
+                       
+
                     }
-                    else if(inicio_final=='f'){
-                        cout << "Ingrese el valor del primer nodo: ";
+                    else if(first_final=='e'){
+                        cout << "Set node value: ";
                         cin >> value;
-                        list.insertNode(value);
+                        list.set_new_node(value);
             }
                 }
             }
             break;
-        case 3:
+            case 3:
             if (size == NULL){
-                cout << "No se ha creado ninguna lista" << endl;
+                cout << "No list created" << endl;
             }
             else {
-                    size--;
-                cout << "Ingrese el valor del elemento que desea eliminar: ";
-                cin >> value;
-                list.deleteNode(value);
-                cout << "--------------------------------------------------- " <<endl;
-                list.printList(); 
-                cout << "--------------------------------------------------- " <<endl;
+                size--;
+                cout << "Set node to eliminate: ";
+                    cin >> value;
+                    list.eliminate_node();
+                    cout << "--------------------------------------------------- " <<endl;
+                    list.show_list(); 
+                    cout << "--------------------------------------------------- " <<endl;
             }
             break;
         case 4:
             if (size == NULL){
-                cout << "No se ha creado ninguna lista" << endl;
+                cout << "No list created" << endl;
             }
             else{
-                cout << "La lista es: ";
-                list.printList(); 
+                cout << "The list is: ";
+                list.show_list(); 
                 cout << endl;
             }
             break;
         case 5:
+            
             break;
         case 6:
             break;
@@ -206,7 +256,7 @@ int main(int argc, char const *argv[])
             break;
         }
 
-    }while(opcion != 6);
+    }while(option != 6);
 
     
     return 0;
