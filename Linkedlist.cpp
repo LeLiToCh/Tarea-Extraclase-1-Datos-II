@@ -50,7 +50,7 @@ public:
             return p;
         }
         else {
-          
+            
             void * p = reinterpret_cast<void *>(collector->get_collector_value());
             std::cout<<"New direccion of node is: " << p <<std::endl;
             return p;
@@ -235,6 +235,10 @@ int main(int argc, char const *argv[])
     */
     int value;
     /**
+        @brief variable auxiliar de cantidad de elementos en la lista
+    */
+    int size_aux = 0;
+    /**
         @brief metodo do que inicializa el menu de uso para que el usuario seleccione la opcion que asi desee
     */
     do{
@@ -258,26 +262,37 @@ int main(int argc, char const *argv[])
             cin >>  size;
             break;
         case 2:
+
             if (size == NULL){
                 cout << "No list created" << endl;
             }
             else{
-                for (int i = 0; i < size; i++){
-
+                for (int i = 0; i <size; i++){
+                   
+                    if (size <= size_aux){
+                        cout << "The list is full" << endl;
+                        break;
+                    }
                     cout << "Set value in beginning or end (b/e) ";
                     cin >> first_final;
+                   
                     if(first_final=='b'){
                         cout << "Set node value: ";
                         cin >> value;
                         list.insertFront(&(list.head),value);
-                       
-
+                        
                     }
-                    else if(first_final=='e'){
+                    if(first_final=='e'){
                         cout << "Set node value: ";
                         cin >> value;
                         list.insertNode(value);
+                        
                     }
+                    size_aux++;
+                    
+                    cout << size << endl;
+                    cout << size_aux << "el aux"<< endl;
+                    
                 }
             }
             break;
@@ -286,7 +301,7 @@ int main(int argc, char const *argv[])
                 cout << "No list created" << endl;
             }
             else {
-                size--;
+                size_aux--;
                 cout << "Set node to eliminate: ";
                     cin >> value;
                     list.deleteNode(value);
