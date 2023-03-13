@@ -1,5 +1,4 @@
 #include <iostream>
-#include<conio.h>
 #include "Collector.cpp"
 using namespace std;
     /**
